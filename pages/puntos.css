@@ -1,0 +1,21 @@
+:root {
+  --page-accent: var(--color-points);
+  --page-accent-muted: var(--color-points-muted);
+  --page-accent-hover: var(--color-points-hover);
+}
+
+.hero-gradient { background: radial-gradient(ellipse at 30% 20%, oklch(18% 0.04 250) 0%, transparent 60%); }
+
+.step-number { background: var(--color-points-muted); color: var(--color-points); }
+.feature-icon { background: var(--color-points-muted); color: var(--color-points); }
+.product-card-points { border-color: var(--color-points); }
+.product-card-points:hover { border-color: var(--color-points); box-shadow: 0 20px 40px -12px rgba(59,130,246,.2); }
+
+.wallet-card { background: radial-gradient(circle at top right, oklch(24% 0.04 250), var(--color-paper-2)); border: 1px solid var(--color-rule); border-radius: 16px; position: relative; overflow: hidden; }
+.wallet-card::before { content: ''; position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, var(--color-points-muted) 0%, transparent 60%); pointer-events: none; }
+
+.mission-btn { border: 1px solid var(--color-rule); background-color: var(--color-paper); transition: all var(--transition-fast); }
+.mission-btn:hover { border-color: var(--color-points); background-color: var(--color-paper-2); }
+
+.reward-item { transition: all .3s; }
+.reward-item.redeemed { opacity: 1; border-color: var(--color-points) !important; border-style: solid !important; }

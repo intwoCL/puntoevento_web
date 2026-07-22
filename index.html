@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PuntoEvento — Gamificación Corporativa B2B</title>
+  <meta name="description" content="Plataforma de gamificación: economía de puntos y gestión de eventos corporativos. Marca blanca, SSO, API.">
+  <meta property="og:title" content="PuntoEvento — Gamificación Corporativa B2B">
+  <meta property="og:description" content="Plataforma de gamificación: economía de puntos y gestión de eventos corporativos.">
+  <meta property="og:image" content="assets/img/og-puntos.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://puntoevento.cl/">
+  <link rel="canonical" href="https://puntoevento.cl/">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { accent: 'var(--color-accent)', points: 'var(--color-points)', events: 'var(--color-events)', corporate: 'var(--color-corporate)' } } }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .hero-gradient { background: radial-gradient(ellipse at 30% 20%, oklch(18% 0.03 250) 0%, transparent 60%); }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PuntoEvento",
+    "url": "https://puntoevento.cl",
+    "description": "Plataforma B2B de gamificación: economía de puntos y gestión de eventos corporativos."
+  }
+  </script>
+</head>
+<body class="bg-[var(--color-paper)] text-[var(--color-ink)] antialiased min-h-screen">
+
+  <!-- HEADER -->
+  <header class="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 pt-4">
+    <div class="max-w-5xl mx-auto bg-[#0f1019]/80 backdrop-blur-xl border border-[var(--color-rule)]/50 rounded-full px-6 py-3 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2 text-lg font-extrabold tracking-tight text-[var(--color-ink)]">
+        <span class="text-[var(--color-accent)]">●</span>PuntoEvento
+      </a>
+      <nav class="hidden md:flex items-center gap-7 text-[13px] font-medium text-[var(--color-ink-muted)]">
+        <a href="puntos.html" class="nav-link hover:text-[var(--color-ink)] transition-colors">Puntos</a>
+        <a href="eventos.html" class="nav-link hover:text-[var(--color-ink)] transition-colors">Eventos</a>
+        <a href="corporativo.html" class="nav-link hover:text-[var(--color-ink)] transition-colors">Corporativo</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <a href="corporativo.html#contacto" class="px-4 py-2 rounded-full text-[11px] uppercase tracking-wider font-semibold border border-[var(--color-rule)] hover:bg-[var(--color-paper-2)] transition-colors text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]">Contactar</a>
+        <a href="puntos.html#simulador" class="px-5 py-2 rounded-full text-[11px] uppercase tracking-wider font-semibold" style="background:var(--color-accent);color:#000">Probar Demo</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero-gradient pt-32 pb-8">
+    <div class="max-w-4xl mx-auto px-6 text-center space-y-8">
+      <div class="inline-flex items-center gap-2 bg-[var(--color-paper-2)] border border-[var(--color-rule)] rounded-full px-4 py-1.5 text-xs text-[var(--color-accent)] font-medium">
+        <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] animate-pulse-dot"></span>
+        <span>Gamificación Corporativa B2B</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] text-[var(--color-ink)]">
+        Gamificación que<br>
+        <span class="text-[var(--color-accent)]">impulsa resultados.</span>
+      </h1>
+
+      <p class="text-base md:text-lg text-[var(--color-ink-muted)] leading-relaxed max-w-2xl mx-auto">
+        Economía de puntos para fidelizar clientes y colaboradores. Gestión de eventos con tickets digitales. Todo en una sola plataforma con marca blanca.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+        <a href="puntos.html#simulador" class="px-8 py-3 rounded-xl text-sm font-bold" style="background:var(--color-points);color:#000">Probar Puntos</a>
+        <a href="eventos.html#simulador" class="px-8 py-3 rounded-xl text-sm font-bold" style="background:var(--color-events);color:#fff">Probar Eventos</a>
+        <a href="corporativo.html" class="px-8 py-3 rounded-xl text-sm font-bold border border-[var(--color-rule)] hover:bg-[var(--color-paper-2)] transition-colors text-[var(--color-ink)]">Corporate Pro</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCT CARDS -->
+  <section class="max-w-5xl mx-auto px-6 section-gap">
+    <div class="text-center space-y-3 mb-12">
+      <span class="text-[11px] uppercase tracking-widest text-[var(--color-ink-muted)] font-bold">Nuestros Productos</span>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-[var(--color-ink)]">Tres soluciones para tu empresa.</h2>
+      <p class="text-sm text-[var(--color-ink-muted)] max-w-lg mx-auto">Elige el módulo que mejor se adapte a tus necesidades o combínalos todos.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <a href="puntos.html" class="product-card group">
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-[var(--color-points-muted)] flex items-center justify-center text-xl group-hover:scale-110 transition-transform">🪙</div>
+          <div>
+            <h3 class="text-lg font-bold text-[var(--color-points)]">Puntos Express</h3>
+            <p class="text-[12px] text-[var(--color-ink-muted)] mt-1">Economía de puntos para fidelizar clientes y colaboradores con misiones, catálogo de premios y canjes QR.</p>
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-[var(--color-rule)]">
+            <span class="text-xl font-extrabold text-[var(--color-ink)]">$590<span class="text-[11px] font-normal text-[var(--color-ink-muted)]"> USD/mes</span></span>
+            <span class="text-[11px] font-bold text-[var(--color-points)] group-hover:underline">Ver detalle →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="eventos.html" class="product-card group">
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-[var(--color-events-muted)] flex items-center justify-center text-xl group-hover:scale-110 transition-transform">📅</div>
+          <div>
+            <h3 class="text-lg font-bold text-[var(--color-events)]">Eventos Express</h3>
+            <p class="text-[12px] text-[var(--color-ink-muted)] mt-1">Gestión de eventos corporativos con registro, tickets digitales QR y notificaciones push en tiempo real.</p>
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-[var(--color-rule)]">
+            <span class="text-xl font-extrabold text-[var(--color-ink)]">$990<span class="text-[11px] font-normal text-[var(--color-ink-muted)]"> USD/evento</span></span>
+            <span class="text-[11px] font-bold text-[var(--color-events)] group-hover:underline">Ver detalle →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="corporativo.html" class="product-card group" style="border-color: var(--color-corporate)">
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-[var(--color-corporate-muted)] flex items-center justify-center text-xl group-hover:scale-110 transition-transform">⚡</div>
+          <div>
+            <h3 class="text-lg font-bold text-[var(--color-corporate)]">Corporate Pro</h3>
+            <p class="text-[12px] text-[var(--color-ink-muted)] mt-1">Puntos + Eventos en una sola plataforma. SSO, marca blanca, API y soporte prioritario.</p>
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-[var(--color-rule)]">
+            <span class="text-xl font-extrabold text-[var(--color-ink)]">$4,800<span class="text-[11px] font-normal text-[var(--color-ink-muted)]"> USD/año</span></span>
+            <span class="text-[11px] font-bold text-[var(--color-corporate)] group-hover:underline">Ver detalle →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- COMPARATIVA RESUMEN -->
+  <section id="comparativa" class="section-gap border-t border-[var(--color-rule)]">
+    <div class="max-w-5xl mx-auto px-6 space-y-12">
+      <div class="text-center space-y-3">
+        <span class="text-[11px] uppercase tracking-widest text-[var(--color-ink-muted)] font-bold">Comparativa</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-[var(--color-ink)]">Dos módulos, una plataforma.</h2>
+        <p class="text-sm text-[var(--color-ink-muted)] max-w-lg mx-auto">Puntos para fidelización, eventos para activación en vivo. O ambos combinados.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="stat-card space-y-5">
+          <div class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl bg-[var(--color-points-muted)] flex items-center justify-center text-lg">🪙</span>
+            <div>
+              <h3 class="text-sm font-bold text-[var(--color-points)]">Puntos</h3>
+              <p class="text-[10px] text-[var(--color-ink-muted)]">Economía de recompensas</p>
+            </div>
+          </div>
+          <div class="space-y-2.5">
+            <div class="check-row"><span class="check-icon check-yes">✓</span><span>Economía de puntos personalizable</span></div>
+            <div class="check-row"><span class="check-icon check-yes">✓</span><span>Misiones y tareas diarias</span></div>
+            <div class="check-row"><span class="check-icon check-yes">✓</span><span>Catálogo de premios y canjes QR</span></div>
+            <div class="check-row"><span class="check-icon check-yes">✓</span><span>Locales asociados</span></div>
+            <div class="check-row"><span class="check-icon check-no">—</span><span class="opacity-50">Gestión de eventos</span></div>
+            <div class="check-row"><span class="check-icon check-no">—</span><span class="opacity-50">Tickets digitales</span></div>
+          </div>
+          <a href="puntos.html" class="block text-center py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider border border-[var(--color-rule)] hover:bg-[var(--color-paper-3)] transition-colors">Ver Landing →</a>
+        </div>
+
+        <div class="stat-card space-y-5">
+          <div class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl bg-[var(--color-events-muted)] flex items-center justify-center text-lg">📅</span>
+            <div>
+              <h3 class="text-sm font-bold text-[var(--color-events)]">Eventos</h3>
+              <p class="text-[10px] text-[var(--color-ink-muted)]">Gestión en vivo</p>
+            </div>
+          </div>
+          <div class="space-y-2.5">
+            <div class="check-row"><span class="check-icon check-no">—</span><span class="opacity-50">Economía de puntos</span></div>
+            <div class="check-row"><span class="check-icon check-no">—</span><span class="opacity-50">Misiones y tareas</span></div>
+            <div class="check-row"><span class="check-icon check-no">—</span><span class="opacity-50">Catálogo de premios</span></div>
+            <div class="check-row"><span class="check-icon check-no">—</span><span class="opacity-50">Locales asociados</span></div>
+            <div class="check-row"><span class="check-icon check-yes">✓</span><span>Gestión de eventos y stands</span></div>
+            <div class="check-row"><span class="check-icon check-yes">✓</span><span>Tickets digitales QR</span></div>
+          </div>
+          <a href="eventos.html" class="block text-center py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider border border-[var(--color-rule)] hover:bg-[var(--color-paper-3)] transition-colors">Ver Landing →</a>
+        </div>
+
+        <div class="stat-card space-y-5" style="border-color: var(--color-corporate)">
+          <div class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl bg-[var(--color-corporate-muted)] flex items-center justify-center text-lg">⚡</span>
+            <div>
+              <h3 class="text-sm font-bold text-[var(--color-corporate)]">Combinado</h3>
+              <p class="text-[10px] text-[var(--color-ink-muted)]">Ecosistema completo</p>
+            </div>
+          </div>
+          <div class="space-y-2.5">
+            <div class="check-row"><span class="check-icon check-yes">✓</span><span>Economía de puntos personalizable</span></div>
+            <div class="check-row"><span class="check-icon check-yes">✓</span><span>Misiones y tareas diarias</span></div>
+            <div class="check-row"><span class="check-icon check-yes">✓</span><span>Catálogo de premios y canjes QR</span></div>
+            <div class="check-row"><span class="check-icon check-yes">✓</span><span>Locales asociados</span></div>
+            <div class="check-row"><span class="check-icon check-yes">✓</span><span>Gestión de eventos y stands</span></div>
+            <div class="check-row"><span class="check-icon check-yes">✓</span><span>Tickets digitales QR</span></div>
+          </div>
+          <a href="corporativo.html" class="block text-center py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider" style="background:var(--color-corporate);color:#fff">Ver Landing →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING RESUMEN -->
+  <section id="pricing" class="section-gap border-t border-[var(--color-rule)]">
+    <div class="max-w-5xl mx-auto px-6 space-y-12">
+      <div class="text-center space-y-3">
+        <span class="text-[11px] uppercase tracking-widest text-[var(--color-accent)] font-bold">Planes</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-[var(--color-ink)]">Un plan para cada necesidad.</h2>
+        <p class="text-sm text-[var(--color-ink-muted)] max-w-lg mx-auto">Desde ferias puntuales hasta fidelización corporativa anual.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div class="plan-card">
+          <div class="space-y-4">
+            <div>
+              <span class="text-[9px] uppercase font-mono px-2 py-0.5 rounded bg-[var(--color-points)]/10 text-[var(--color-points)]">Puntos</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold">Puntos Express</h3>
+              <p class="text-[11px] text-[var(--color-ink-muted)] mt-1">Para programas de fidelización temporales.</p>
+            </div>
+            <div>
+              <span class="text-3xl font-extrabold text-[var(--color-ink)]">$590</span>
+              <span class="text-[11px] text-[var(--color-ink-muted)]"> USD/mes</span>
+            </div>
+            <div class="border-t border-[var(--color-rule)] pt-4 space-y-2.5">
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Hasta 500 jugadores</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>3 sucursales</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Catálogo básico</span></div>
+            </div>
+          </div>
+          <a href="puntos.html#pricing" class="mt-6 block text-center py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider border border-[var(--color-rule)] hover:bg-[var(--color-paper-3)] transition-colors">Ver Planes</a>
+        </div>
+
+        <div class="plan-card">
+          <div class="space-y-4">
+            <div>
+              <span class="text-[9px] uppercase font-mono px-2 py-0.5 rounded bg-[var(--color-events)]/10 text-[var(--color-events)]">Eventos</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold">Eventos Express</h3>
+              <p class="text-[11px] text-[var(--color-ink-muted)] mt-1">Para ferias, congresos y activaciones.</p>
+            </div>
+            <div>
+              <span class="text-3xl font-extrabold text-[var(--color-ink)]">$990</span>
+              <span class="text-[11px] text-[var(--color-ink-muted)]"> USD/evento</span>
+            </div>
+            <div class="border-t border-[var(--color-rule)] pt-4 space-y-2.5">
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Hasta 1,000 asistentes</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>3 días de duración</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Tickets digitales</span></div>
+            </div>
+          </div>
+          <a href="eventos.html#pricing" class="mt-6 block text-center py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider border border-[var(--color-rule)] hover:bg-[var(--color-paper-3)] transition-colors">Ver Planes</a>
+        </div>
+
+        <div class="plan-card plan-featured" style="--color-accent: var(--color-corporate)">
+          <div class="space-y-4">
+            <div>
+              <span class="text-[9px] uppercase font-mono px-2 py-0.5 rounded bg-[var(--color-corporate)]/15 text-[var(--color-corporate)]">Combinado</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold">Corporate Pro</h3>
+              <p class="text-[11px] text-[var(--color-ink-muted)] mt-1">Puntos + Eventos. Para empresas activas.</p>
+            </div>
+            <div>
+              <span class="text-3xl font-extrabold text-[var(--color-ink)]">$4,800</span>
+              <span class="text-[11px] text-[var(--color-ink-muted)]"> USD/año</span>
+            </div>
+            <div class="text-[9px] text-zinc-500">Facturado anualmente</div>
+            <div class="border-t border-[var(--color-rule)] pt-4 space-y-2.5">
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Jugadores ilimitados</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Eventos ilimitados</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Sucursales ilimitadas</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>SSO Microsoft + Google</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Marca blanca completa</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>API y soporte prioritario</span></div>
+            </div>
+          </div>
+          <a href="corporativo.html#pricing" class="mt-6 block text-center py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider" style="background:var(--color-corporate);color:#fff">Ver Planes</a>
+        </div>
+      </div>
+      <p class="text-[10px] text-zinc-500 text-center">Todos los planes incluyen actualizaciones, soporte por correo y SSL. *Precios en USD sin IVA/IGIC.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-[var(--color-rule)] py-8">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-2 text-sm font-extrabold text-[var(--color-ink)]">
+        <span class="text-[var(--color-accent)]">●</span>PuntoEvento
+      </div>
+      <div class="flex items-center gap-6 text-[11px] text-[var(--color-ink-muted)]">
+        <a href="puntos.html" class="hover:text-[var(--color-ink)] transition-colors">Puntos</a>
+        <a href="eventos.html" class="hover:text-[var(--color-ink)] transition-colors">Eventos</a>
+        <a href="corporativo.html" class="hover:text-[var(--color-ink)] transition-colors">Corporativo</a>
+        <a href="corporativo.html#contacto" class="hover:text-[var(--color-ink)] transition-colors">Contacto</a>
+      </div>
+      <p class="text-[10px] text-[var(--color-ink-muted)]">© 2026 PuntoEvento — Gamificación Corporativa B2B.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

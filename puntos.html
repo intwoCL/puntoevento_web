@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puntos Corporativos y Fidelización — PuntoEvento</title>
+  <meta name="description" content="Crea una economía de puntos para fidelizar clientes y colaboradores. Misiones, catálogo de premios, canjes QR. Desde $590/mes.">
+  <meta property="og:title" content="Puntos Corporativos y Fidelización — PuntoEvento">
+  <meta property="og:description" content="Crea una economía de puntos para fidelizar clientes y colaboradores. Misiones, catálogo de premios, canjes QR.">
+  <meta property="og:image" content="assets/img/og-puntos.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://puntoevento.cl/puntos.html">
+  <link rel="canonical" href="https://puntoevento.cl/puntos.html">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { accent: 'var(--color-points)', points: 'var(--color-points)', events: 'var(--color-events)' } } }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="pages/puntos.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PuntoEvento - Puntos",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "AggregateOffer",
+      "lowPrice": "590",
+      "highPrice": "4800",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+<body class="bg-[var(--color-paper)] text-[var(--color-ink)] antialiased min-h-screen">
+
+  <!-- ACCESS FORM MODAL -->
+  <div id="access-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 transition-all duration-500 opacity-0 pointer-events-none">
+    <div class="bg-[var(--color-paper-2)] border border-[var(--color-rule)] rounded-3xl shadow-2xl w-full max-w-md p-8 space-y-6">
+      <div class="text-center space-y-1">
+        <div class="w-12 h-12 mx-auto rounded-2xl bg-[var(--color-points)]/10 flex items-center justify-center text-xl mb-3">🎯</div>
+        <h3 class="text-xl font-extrabold text-[var(--color-ink)]">Acceso al Simulador</h3>
+        <p class="text-xs text-[var(--color-ink-muted)]">Ingresa tus datos para comenzar la demo interactiva.</p>
+      </div>
+      <form id="access-form" class="space-y-4" novalidate>
+        <div class="space-y-1.5">
+          <label for="form-name" class="text-[10px] font-bold text-[var(--color-ink-muted)] uppercase tracking-widest">Nombre *</label>
+          <input type="text" id="form-name" required class="access-form-input" placeholder="Tu nombre completo">
+        </div>
+        <div class="space-y-1.5">
+          <label for="form-email" class="text-[10px] font-bold text-[var(--color-ink-muted)] uppercase tracking-widest">Correo *</label>
+          <input type="email" id="form-email" required class="access-form-input" placeholder="correo@empresa.com">
+        </div>
+        <div class="space-y-1.5">
+          <label for="form-comment" class="text-[10px] font-bold text-[var(--color-ink-muted)] uppercase tracking-widest">Comentario <span class="opacity-50">(opcional)</span></label>
+          <textarea id="form-comment" rows="2" class="access-form-input resize-none" placeholder="¿En qué podemos ayudarte?"></textarea>
+        </div>
+        <div class="space-y-1.5">
+          <label class="text-[10px] font-bold text-[var(--color-ink-muted)] uppercase tracking-widest">Verificación *</label>
+          <div class="flex items-center gap-3">
+            <canvas id="captcha-canvas-1" class="flex-1 rounded-xl border border-[var(--color-rule)]" style="height:50px"></canvas>
+            <span class="text-[var(--color-ink-muted)] font-bold">+</span>
+            <canvas id="captcha-canvas-2" class="flex-1 rounded-xl border border-[var(--color-rule)]" style="height:50px"></canvas>
+            <span class="text-[var(--color-ink-muted)] font-bold">=</span>
+            <input type="number" id="captcha-input" required class="w-16 text-center access-form-input font-mono [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" placeholder="?">
+          </div>
+          <p id="captcha-error" class="text-[10px] text-[var(--color-rose)] hidden">Respuesta incorrecta.</p>
+        </div>
+        <button type="submit" id="form-submit-btn" class="primary-btn w-full py-3.5 rounded-xl text-sm font-bold uppercase tracking-wider" style="background:var(--color-points);color:#000">Ingresar</button>
+        <p id="form-error" class="text-[10px] text-[var(--color-rose)] text-center hidden">Completa todos los campos obligatorios.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 pt-4">
+    <div class="max-w-5xl mx-auto bg-[#0f1019]/80 backdrop-blur-xl border border-[var(--color-rule)]/50 rounded-full px-6 py-3 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2 text-lg font-extrabold tracking-tight text-[var(--color-ink)]">
+        <span class="text-[var(--color-points)]">●</span>PuntoEvento
+      </a>
+      <nav class="hidden md:flex items-center gap-7 text-[13px] font-medium text-[var(--color-ink-muted)]">
+        <a href="#como-funciona" class="nav-link hover:text-[var(--color-ink)] transition-colors">Cómo Funciona</a>
+        <a href="#simulador" class="nav-link hover:text-[var(--color-ink)] transition-colors">Simulador</a>
+        <a href="#features" class="nav-link hover:text-[var(--color-ink)] transition-colors">Features</a>
+        <a href="#pricing" class="nav-link hover:text-[var(--color-ink)] transition-colors">Planes</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <a href="#contacto" class="px-4 py-2 rounded-full text-[11px] uppercase tracking-wider font-semibold border border-[var(--color-rule)] hover:bg-[var(--color-paper-2)] transition-colors text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]">Contactar</a>
+        <a href="#simulador" class="px-5 py-2 rounded-full text-[11px] uppercase tracking-wider font-semibold" style="background:var(--color-points);color:#000">Probar Demo</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero-gradient pt-32 pb-8">
+    <div class="max-w-4xl mx-auto px-6 text-center space-y-8">
+      <div class="inline-flex items-center gap-2 bg-[var(--color-paper-2)] border border-[var(--color-rule)] rounded-full px-4 py-1.5 text-xs text-[var(--color-points)] font-medium">
+        <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-points)] animate-pulse-dot"></span>
+        <span>Módulo de Puntos y Recompensas</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] text-[var(--color-ink)]">
+        Gamificación de Puntos<br>
+        <span class="text-[var(--color-points)]">para Empresas.</span>
+      </h1>
+
+      <p class="text-base md:text-lg text-[var(--color-ink-muted)] leading-relaxed max-w-2xl mx-auto">
+        Fideliza a tus colaboradores o clientes mediante una billetera de puntos virtual 100% personalizable. Los usuarios realizan misiones diarias y canjean sus saldos en tiendas internas o locales asociados.
+      </p>
+
+      <!-- Phone Showcase -->
+      <div class="phone-showcase pt-4">
+        <!-- Left callouts -->
+        <div class="callouts-left hidden lg:flex flex-col gap-6">
+          <div class="feature-callout" style="--delay:0.2s">
+            <div class="callout-icon" style="background:oklch(95% 0.03 250);color:var(--color-points)">🎯</div>
+            <div class="callout-text">
+              <h4 class="font-bold text-[var(--color-ink)] text-sm">Misiones Diarias</h4>
+              <p class="text-xs text-[var(--color-ink-muted)]">Acciones que generan puntos automáticamente</p>
+            </div>
+            <div class="callout-line callout-line-right"></div>
+          </div>
+          <div class="feature-callout" style="--delay:0.4s">
+            <div class="callout-icon" style="background:oklch(95% 0.03 250);color:var(--color-points)">🪙</div>
+            <div class="callout-text">
+              <h4 class="font-bold text-[var(--color-ink)] text-sm">Billetera Virtual</h4>
+              <p class="text-xs text-[var(--color-ink-muted)]">Balance en tiempo real con progreso</p>
+            </div>
+            <div class="callout-line callout-line-right"></div>
+          </div>
+          <div class="feature-callout" style="--delay:0.6s">
+            <div class="callout-icon" style="background:oklch(95% 0.03 250);color:var(--color-points)">🏆</div>
+            <div class="callout-text">
+              <h4 class="font-bold text-[var(--color-ink)] text-sm">Logros y Rangos</h4>
+              <p class="text-xs text-[var(--color-ink-muted)]">Niveles desbloqueables por actividad</p>
+            </div>
+            <div class="callout-line callout-line-right"></div>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="phone-frame relative">
+          <div class="phone-notch"></div>
+          <div class="phone-screen h-full flex flex-col relative overflow-hidden">
+            <div id="phone-notification" class="absolute top-12 left-3 right-3 bg-[var(--color-paper-2)] border border-[var(--color-emerald)]/30 rounded-xl p-3 text-xs text-[var(--color-ink)] shadow-xl z-30 -translate-y-[150%] opacity-0 transition-all duration-500 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-[var(--color-emerald)] shrink-0"></span>
+              <span id="notification-text" class="flex-1 font-medium"></span>
+            </div>
+            <div class="flex justify-between items-center text-[10px] text-zinc-500 font-mono px-5 pt-4">
+              <span>9:41</span>
+              <span>📶 🔋</span>
+            </div>
+            <div id="phone-screen-content" class="flex-1 overflow-y-auto space-y-4 px-4 py-3">
+              <div class="wallet-card text-center p-5 space-y-1">
+                <span class="text-[10px] uppercase tracking-wider text-[var(--color-points)] font-bold">Tu Cuenta</span>
+                <h3 class="text-[11px] text-[var(--color-ink-muted)]">Balance de <span class="coin-name-display font-medium text-[var(--color-points)]">Muni-Puntos</span></h3>
+                <div class="text-3xl font-extrabold tracking-tight text-[var(--color-ink)] flex items-center justify-center gap-1.5">
+                  <span class="coin-icon-display">🪙</span>
+                  <span id="user-points">0</span>
+                </div>
+                <div class="w-full h-1 bg-zinc-800 rounded-full overflow-hidden mt-3">
+                  <div id="progress-bar" class="h-full bg-[var(--color-points)] transition-all duration-500" style="width:0%"></div>
+                </div>
+              </div>
+              <div class="flex justify-between items-center border-b border-[var(--color-rule)] pb-1.5">
+                <span class="text-[11px] font-bold text-[var(--color-ink)]">Catálogo</span>
+                <span class="text-[9px] text-zinc-500">Canjes en Sucursal</span>
+              </div>
+              <div class="space-y-2.5">
+                <div id="reward-keychain" class="reward-item p-3 border border-[var(--color-rule)] rounded-xl flex items-center justify-between transition-all duration-300 opacity-55 border-dashed">
+                  <div class="space-y-0.5">
+                    <h4 class="text-[11px] font-bold text-[var(--color-ink)]">Llavero Metálico</h4>
+                    <p class="text-[8px] text-[var(--color-points)] font-mono uppercase">Catálogo Interno</p>
+                    <span class="prize-status text-[9px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 font-medium">100 <span class="coin-name-display-short">pts</span></span>
+                  </div>
+                  <button class="redeem-btn text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors bg-transparent text-gray-500 cursor-not-allowed" disabled>Canjear</button>
+                </div>
+                <div id="reward-mug" class="reward-item p-3 border border-[var(--color-rule)] rounded-xl flex items-center justify-between transition-all duration-300 opacity-55 border-dashed">
+                  <div class="space-y-0.5">
+                    <h4 class="text-[11px] font-bold text-[var(--color-ink)]">Termo Metálico</h4>
+                    <p class="text-[8px] text-[var(--color-points)] font-mono uppercase">Catálogo Interno</p>
+                    <span class="prize-status text-[9px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 font-medium">300 <span class="coin-name-display-short">pts</span></span>
+                  </div>
+                  <button class="redeem-btn text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors bg-transparent text-gray-500 cursor-not-allowed" disabled>Canjear</button>
+                </div>
+                <div id="reward-shirt" class="reward-item p-3 border border-[var(--color-rule)] rounded-xl flex items-center justify-between transition-all duration-300 opacity-55 border-dashed">
+                  <div class="space-y-0.5">
+                    <h4 class="text-[11px] font-bold text-[var(--color-ink)]">Café Premium</h4>
+                    <p class="text-[8px] text-[var(--color-emerald)] font-mono uppercase">Local Asociado</p>
+                    <span class="prize-status text-[9px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 font-medium">600 <span class="coin-name-display-short">pts</span></span>
+                  </div>
+                  <button class="redeem-btn text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors bg-transparent text-gray-500 cursor-not-allowed" disabled>Canjear</button>
+                </div>
+                <div id="reward-pass" class="reward-item p-3 border border-[var(--color-rule)] rounded-xl flex items-center justify-between transition-all duration-300 opacity-55 border-dashed">
+                  <div class="space-y-0.5">
+                    <h4 class="text-[11px] font-bold text-[var(--color-ink)]">Gift Card $10.000</h4>
+                    <p class="text-[8px] text-[var(--color-emerald)] font-mono uppercase">Local Asociado</p>
+                    <span class="prize-status text-[9px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 font-medium">1000 <span class="coin-name-display-short">pts</span></span>
+                  </div>
+                  <button class="redeem-btn text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors bg-transparent text-gray-500 cursor-not-allowed" disabled>Canjear</button>
+                </div>
+              </div>
+              <div id="phone-redeem-modal" class="absolute inset-0 bg-[var(--color-paper)] p-5 z-40 flex flex-col justify-between items-center translate-y-full opacity-0 pointer-events-none transition-all duration-500 rounded-[30px] border border-zinc-950">
+                <div class="w-full flex-1 flex flex-col justify-center items-center space-y-4 text-center my-auto">
+                  <div class="w-12 h-12 rounded-full bg-[oklch(72%_0.16_150_/_0.15)] flex items-center justify-center text-[oklch(72%_0.16_150)] text-xl font-bold">✓</div>
+                  <div class="space-y-1">
+                    <h4 class="text-sm font-black text-[var(--color-ink)]">¡Canje Exitoso!</h4>
+                    <p class="text-[9px] text-[var(--color-ink-muted)]">Muestra este código QR para retirar tu premio</p>
+                  </div>
+                  <div class="w-28 h-28 bg-white p-2 rounded-xl flex items-center justify-center border border-zinc-200">
+                    <svg class="w-24 h-24 text-black" viewBox="0 0 100 100">
+                      <rect x="5" y="5" width="22" height="22" fill="none" stroke="currentColor" stroke-width="5"/><rect x="10" y="10" width="12" height="12" fill="currentColor"/>
+                      <rect x="73" y="5" width="22" height="22" fill="none" stroke="currentColor" stroke-width="5"/><rect x="78" y="10" width="12" height="12" fill="currentColor"/>
+                      <rect x="5" y="73" width="22" height="22" fill="none" stroke="currentColor" stroke-width="5"/><rect x="10" y="78" width="12" height="12" fill="currentColor"/>
+                      <rect x="36" y="5" width="8" height="12" fill="currentColor"/><rect x="48" y="12" width="12" height="6" fill="currentColor"/>
+                      <rect x="42" y="28" width="18" height="8" fill="currentColor"/><rect x="5" y="42" width="12" height="8" fill="currentColor"/>
+                      <rect x="24" y="38" width="8" height="18" fill="currentColor"/><rect x="70" y="40" width="12" height="12" fill="currentColor"/>
+                      <rect x="38" y="48" width="10" height="10" fill="currentColor"/><rect x="56" y="68" width="8" height="18" fill="currentColor"/>
+                      <rect x="38" y="72" width="10" height="8" fill="currentColor"/><rect x="74" y="74" width="14" height="14" fill="currentColor"/>
+                    </svg>
+                  </div>
+                  <div class="space-y-0.5">
+                    <span class="text-[8px] uppercase tracking-widest text-zinc-500 font-bold">Código</span>
+                    <p id="redeem-code-display" class="text-xs font-mono font-bold text-[var(--color-points)]">PE-7492-X</p>
+                    <p id="redeem-product-display" class="text-[11px] font-extrabold text-[var(--color-ink)] mt-1">Café Premium</p>
+                  </div>
+                </div>
+                <button id="close-redeem-modal" class="w-full py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider" style="background:var(--color-points);color:#000">Volver al Catálogo</button>
+              </div>
+            </div>
+            <div class="flex justify-around items-center border-t border-[var(--color-rule)] py-2 text-[10px] text-zinc-500 px-4">
+              <span class="text-[var(--color-points)] font-bold">Misiones</span>
+              <span>Canjes</span>
+              <span>Perfil</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right callouts -->
+        <div class="callouts-right hidden lg:flex flex-col gap-6">
+          <div class="feature-callout" style="--delay:0.3s">
+            <div class="callout-line callout-line-left"></div>
+            <div class="callout-icon" style="background:oklch(95% 0.03 250);color:var(--color-points)">🛒</div>
+            <div class="callout-text">
+              <h4 class="font-bold text-[var(--color-ink)] text-sm">Catálogo de Premios</h4>
+              <p class="text-xs text-[var(--color-ink-muted)]">Canjea puntos por productos reales</p>
+            </div>
+          </div>
+          <div class="feature-callout" style="--delay:0.5s">
+            <div class="callout-line callout-line-left"></div>
+            <div class="callout-icon" style="background:oklch(95% 0.03 250);color:var(--color-points)">✅</div>
+            <div class="callout-text">
+              <h4 class="font-bold text-[var(--color-ink)] text-sm">Canje con QR</h4>
+              <p class="text-xs text-[var(--color-ink-muted)]">Retiro instantáneo con código único</p>
+            </div>
+          </div>
+          <div class="feature-callout" style="--delay:0.7s">
+            <div class="callout-line callout-line-left"></div>
+            <div class="callout-icon" style="background:oklch(95% 0.03 250);color:var(--color-points)">📊</div>
+            <div class="callout-text">
+              <h4 class="font-bold text-[var(--color-ink)] text-sm">Dashboard Admin</h4>
+              <p class="text-xs text-[var(--color-ink-muted)]">Métricas y control del programa</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+        <a href="#simulador" class="px-8 py-3 rounded-xl text-sm font-bold" style="background:var(--color-points);color:#000">Explorar Simulador</a>
+        <a href="#pricing" class="px-8 py-3 rounded-xl text-sm font-bold border border-[var(--color-rule)] hover:bg-[var(--color-paper-2)] transition-colors text-[var(--color-ink)]">Ver Planes</a>
+        <a href="#contacto" class="px-8 py-3 rounded-xl text-sm font-bold border border-[var(--color-rule)] hover:bg-[var(--color-paper-2)] transition-colors text-[var(--color-ink)]">Solicitar Información</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CÓMO FUNCIONA -->
+  <section id="como-funciona" class="max-w-5xl mx-auto px-6 section-gap">
+    <div class="text-center space-y-3 mb-12">
+      <span class="text-[11px] uppercase tracking-widest text-[var(--color-points)] font-bold">Cómo Funciona</span>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-[var(--color-ink)] leading-tight">Tres pasos para fidelizar.</h2>
+      <p class="text-sm text-[var(--color-ink-muted)] max-w-lg mx-auto">Configura tu economía de puntos en minutos y comienza a recompensar a tu comunidad.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3 class="text-lg font-bold text-[var(--color-ink)] mb-2">Crea tu Moneda</h3>
+        <p class="text-[13px] text-[var(--color-ink-muted)]">Personaliza el nombre, icono y color de tus puntos. Marca blanca 100% con la identidad de tu empresa.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3 class="text-lg font-bold text-[var(--color-ink)] mb-2">Asigna Misiones</h3>
+        <p class="text-[13px] text-[var(--color-ink-muted)]">Define tareas diarias, compras en locales asociados o actividades de capacitación que otorgan puntos.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3 class="text-lg font-bold text-[var(--color-ink)] mb-2">Usuarios Canjean</h3>
+        <p class="text-[13px] text-[var(--color-ink-muted)]">Ellos eligen premios del catálogo y muestran un código QR en sucursal para retirar su recompensa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIMULADOR -->
+  <section id="simulador" class="max-w-5xl mx-auto px-6 section-gap border-t border-[var(--color-rule)]">
+    <div class="text-center space-y-3 mb-10">
+      <span class="text-[11px] uppercase tracking-widest text-[var(--color-points)] font-bold">Simulación en vivo</span>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-[var(--color-ink)] leading-tight">Prueba el flujo tú mismo.</h2>
+      <p class="text-sm text-[var(--color-ink-muted)] max-w-lg mx-auto">Haz clic en las misiones para acumular puntos y canjear premios en el simulador de arriba.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <button data-points="100" class="mission-btn text-left p-5 rounded-2xl space-y-3 group">
+        <span class="text-[9px] text-zinc-500 font-mono uppercase tracking-wider">Tarea de Colaborador</span>
+        <h4 class="text-[13px] font-bold text-[var(--color-ink)] group-hover:text-[var(--color-points)] transition-colors leading-snug">Completar Curso de Capacitación Semanal</h4>
+        <div class="flex justify-between items-center">
+          <p class="text-[9px] text-zinc-500">Módulo Interno</p>
+          <span class="text-sm font-extrabold text-[var(--color-points)]">+100 <span class="coin-name-display-short text-[10px]">pts</span></span>
+        </div>
+      </button>
+      <button data-points="200" class="mission-btn text-left p-5 rounded-2xl space-y-3 group">
+        <span class="text-[9px] text-zinc-500 font-mono uppercase tracking-wider">Convenio Comercial</span>
+        <h4 class="text-[13px] font-bold text-[var(--color-ink)] group-hover:text-[var(--color-points)] transition-colors leading-snug">Realizar Compra en Comercio Asociado</h4>
+        <div class="flex justify-between items-center">
+          <p class="text-[9px] text-zinc-500">Local Externo</p>
+          <span class="text-sm font-extrabold text-[var(--color-points)]">+200 <span class="coin-name-display-short text-[10px]">pts</span></span>
+        </div>
+      </button>
+      <button data-points="50" class="mission-btn text-left p-5 rounded-2xl space-y-3 group">
+        <span class="text-[9px] text-zinc-500 font-mono uppercase tracking-wider">Actividad Diaria</span>
+        <h4 class="text-[13px] font-bold text-[var(--color-ink)] group-hover:text-[var(--color-points)] transition-colors leading-snug">Registrar Actividad del Día</h4>
+        <div class="flex justify-between items-center">
+          <p class="text-[9px] text-zinc-500">Check-in</p>
+          <span class="text-sm font-extrabold text-[var(--color-points)]">+50 <span class="coin-name-display-short text-[10px]">pts</span></span>
+        </div>
+      </button>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="max-w-5xl mx-auto px-6 section-gap border-t border-[var(--color-rule)]">
+    <div class="text-center space-y-3 mb-12">
+      <span class="text-[11px] uppercase tracking-widest text-[var(--color-points)] font-bold">Features</span>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-[var(--color-ink)] leading-tight">Todo lo que necesitas para fidelizar.</h2>
+      <p class="text-sm text-[var(--color-ink-muted)] max-w-lg mx-auto">Herramientas diseñadas para empresas que quieren engagement real con sus clientes y colaboradores.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="feature-card">
+        <div class="feature-icon">🪙</div>
+        <h3 class="text-sm font-bold text-[var(--color-ink)] mb-1">Economía Personalizable</h3>
+        <p class="text-[12px] text-[var(--color-ink-muted)]">Crea tu propia moneda virtual con nombre, icono y color. Marca blanca completa.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <h3 class="text-sm font-bold text-[var(--color-ink)] mb-1">Misiones y Tareas</h3>
+        <p class="text-[12px] text-[var(--color-ink-muted)]">Define tareas diarias, cursos de capacitación o compras que otorgan puntos automáticamente.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎁</div>
+        <h3 class="text-sm font-bold text-[var(--color-ink)] mb-1">Catálogo de Premios</h3>
+        <p class="text-[12px] text-[var(--color-ink-muted)]">Configura un catálogo de productos y servicios canjeables con códigos QR únicos.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏪</div>
+        <h3 class="text-sm font-bold text-[var(--color-ink)] mb-1">Locales Asociados</h3>
+        <p class="text-[12px] text-[var(--color-ink-muted)]">Conecta comercios externos que acepten tus puntos como medio de pago o descuento.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔐</div>
+        <h3 class="text-sm font-bold text-[var(--color-ink)] mb-1">SSO Corporativo</h3>
+        <p class="text-[12px] text-[var(--color-ink-muted)]">Integración con Microsoft Azure AD y Google Workspace para inicio de sesión único.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚙️</div>
+        <h3 class="text-sm font-bold text-[var(--color-ink)] mb-1">API y Webhooks</h3>
+        <p class="text-[12px] text-[var(--color-ink-muted)]">Conecta tu sistema existente mediante nuestra API RESTful y recibe notificaciones en tiempo real.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" class="section-gap border-t border-[var(--color-rule)]">
+    <div class="max-w-5xl mx-auto px-6 space-y-12">
+      <div class="text-center space-y-3">
+        <span class="text-[11px] uppercase tracking-widest text-[var(--color-points)] font-bold">Planes</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-[var(--color-ink)]">Un plan para cada necesidad.</h2>
+        <p class="text-sm text-[var(--color-ink-muted)] max-w-lg mx-auto">Desde programas temporales hasta fidelización corporativa anual.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+        <div class="plan-card">
+          <div class="space-y-4">
+            <div>
+              <span class="text-[9px] uppercase font-mono px-2 py-0.5 rounded bg-[var(--color-points)]/10 text-[var(--color-points)]">Puntos</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold">Puntos Express</h3>
+              <p class="text-[11px] text-[var(--color-ink-muted)] mt-1">Para programas de fidelización temporales.</p>
+            </div>
+            <div>
+              <span class="text-3xl font-extrabold text-[var(--color-ink)]">$590</span>
+              <span class="text-[11px] text-[var(--color-ink-muted)]"> USD/mes</span>
+            </div>
+            <div class="border-t border-[var(--color-rule)] pt-4 space-y-2.5">
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Hasta 500 jugadores</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>3 sucursales</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Catálogo básico</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Marca blanca</span></div>
+            </div>
+          </div>
+          <button onclick="showPlanModal('Puntos Express', '$590 USD/mes')" class="mt-6 block text-center py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider border border-[var(--color-rule)] hover:bg-[var(--color-paper-3)] transition-colors">Adquirir</button>
+        </div>
+        <div class="plan-card plan-featured" style="--color-accent: var(--color-points)">
+          <div class="space-y-4">
+            <div>
+              <span class="text-[9px] uppercase font-mono px-2 py-0.5 rounded bg-[var(--color-points)]/15 text-[var(--color-points)]">Combinado</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold">Corporate Pro</h3>
+              <p class="text-[11px] text-[var(--color-ink-muted)] mt-1">Puntos + Eventos. Para empresas activas.</p>
+            </div>
+            <div>
+              <span class="text-3xl font-extrabold text-[var(--color-ink)]">$4,800</span>
+              <span class="text-[11px] text-[var(--color-ink-muted)]"> USD/año</span>
+            </div>
+            <div class="text-[9px] text-zinc-500">Facturado anualmente</div>
+            <div class="border-t border-[var(--color-rule)] pt-4 space-y-2.5">
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Jugadores ilimitados</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Eventos ilimitados</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Sucursales ilimitadas</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>SSO Microsoft + Google</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>Marca blanca completa</span></div>
+              <div class="check-row"><span class="check-icon check-yes">✓</span><span>API y soporte prioritario</span></div>
+            </div>
+          </div>
+          <button onclick="showPlanModal('Corporate Pro', '$4,800 USD/año')" class="mt-6 block text-center py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider" style="background:var(--color-points);color:#000">Cotizar</button>
+        </div>
+      </div>
+      <p class="text-[10px] text-zinc-500 text-center">Todos los planes incluyen actualizaciones, soporte por correo y SSL. *Precios en USD sin IVA/IGIC.</p>
+    </div>
+  </section>
+
+  <!-- TESTIMONIOS -->
+  <section class="max-w-5xl mx-auto px-6 section-gap border-t border-[var(--color-rule)]">
+    <div class="text-center space-y-3 mb-12">
+      <span class="text-[11px] uppercase tracking-widest text-[var(--color-ink-muted)] font-bold">Testimonios</span>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-[var(--color-ink)]">Lo que dicen nuestros clientes.</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="testimonial-card space-y-3">
+        <p class="text-[13px] text-[var(--color-ink-muted)] leading-relaxed">"Implementamos el sistema de puntos para nossa rede de farmácias y la retención de clientes subió 34% en 3 meses."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-[var(--color-points-muted)] flex items-center justify-center text-sm font-bold text-[var(--color-points)]">MR</div>
+          <div>
+            <p class="text-[12px] font-bold text-[var(--color-ink)]">María Rodríguez</p>
+            <p class="text-[10px] text-[var(--color-ink-muted)]">Directora de Marketing, FarmaciasSalud</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card space-y-3">
+        <p class="text-[13px] text-[var(--color-ink-muted)] leading-relaxed">"La personalización con marca blanca fue clave. Nuestros colaboradores sienten que es nuestra plataforma interna."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-[var(--color-points-muted)] flex items-center justify-center text-sm font-bold text-[var(--color-points)]">CP</div>
+          <div>
+            <p class="text-[12px] font-bold text-[var(--color-ink)]">Carlos Pérez</p>
+            <p class="text-[10px] text-[var(--color-ink-muted)]">RRHH Manager, TechCorp Chile</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card space-y-3">
+        <p class="text-[13px] text-[var(--color-ink-muted)] leading-relaxed">"El catálogo de premios y los códigos QR simplificaron todo el proceso de canje. Muy intuitivo para los usuarios."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-[var(--color-points-muted)] flex items-center justify-center text-sm font-bold text-[var(--color-points)]">AL</div>
+          <div>
+            <p class="text-[12px] font-bold text-[var(--color-ink)]">Ana López</p>
+            <p class="text-[10px] text-[var(--color-ink-muted)]">Gerente de Operaciones, RetailPlus</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA + CONTACTO -->
+  <section id="contacto" class="max-w-3xl mx-auto px-6 section-gap">
+    <div class="cta-section space-y-6">
+      <div class="space-y-2">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-[var(--color-ink)]">¿Listo para fidelizar?</h2>
+        <p class="text-sm text-[var(--color-ink-muted)]">Cuéntanos sobre tu empresa y te configuramos una demo personalizada.</p>
+      </div>
+      <form id="contact-form" class="space-y-4 text-left" novalidate>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label class="text-[10px] font-bold text-[var(--color-ink-muted)] uppercase tracking-widest">Nombre *</label>
+            <input type="text" name="nombre" required class="access-form-input" placeholder="Tu nombre completo">
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-[10px] font-bold text-[var(--color-ink-muted)] uppercase tracking-widest">Correo *</label>
+            <input type="email" name="email" required class="access-form-input" placeholder="correo@empresa.com">
+          </div>
+        </div>
+        <div class="space-y-1.5">
+          <label class="text-[10px] font-bold text-[var(--color-ink-muted)] uppercase tracking-widest">Empresa</label>
+          <input type="text" name="empresa" class="access-form-input" placeholder="Nombre de tu empresa">
+        </div>
+        <div class="space-y-1.5">
+          <label class="text-[10px] font-bold text-[var(--color-ink-muted)] uppercase tracking-widest">Comentario <span class="opacity-50">(opcional)</span></label>
+          <textarea name="comentario" rows="3" class="access-form-input resize-none" placeholder="Cuéntanos sobre tu proyecto..."></textarea>
+        </div>
+        <div class="space-y-1.5">
+          <label class="text-[10px] font-bold text-[var(--color-ink-muted)] uppercase tracking-widest">Verificación *</label>
+          <div class="flex items-center gap-3">
+            <canvas id="contact-captcha-1" class="flex-1 rounded-xl border border-[var(--color-rule)]" style="height:50px"></canvas>
+            <span class="text-[var(--color-ink-muted)] font-bold">+</span>
+            <canvas id="contact-captcha-2" class="flex-1 rounded-xl border border-[var(--color-rule)]" style="height:50px"></canvas>
+            <span class="text-[var(--color-ink-muted)] font-bold">=</span>
+            <input type="number" name="captcha" required class="w-16 text-center access-form-input font-mono [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" placeholder="?">
+          </div>
+          <p id="contact-captcha-error" class="text-[10px] text-[var(--color-rose)] hidden">Respuesta incorrecta.</p>
+        </div>
+        <button type="submit" class="w-full py-3.5 rounded-xl text-sm font-bold uppercase tracking-wider" style="background:var(--color-points);color:#000">Enviar Mensaje</button>
+        <p id="contact-form-error" class="text-[10px] text-[var(--color-rose)] text-center hidden">Completa todos los campos obligatorios.</p>
+        <p id="contact-form-success" class="text-[12px] text-[var(--color-emerald)] text-center hidden">¡Mensaje enviado correctamente! Te contactaremos pronto.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-[var(--color-rule)] py-8">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-2 text-sm font-extrabold text-[var(--color-ink)]">
+        <span class="text-[var(--color-points)]">●</span>PuntoEvento
+      </div>
+      <div class="flex items-center gap-6 text-[11px] text-[var(--color-ink-muted)]">
+        <a href="puntos.html" class="hover:text-[var(--color-ink)] transition-colors">Puntos</a>
+        <a href="eventos.html" class="hover:text-[var(--color-ink)] transition-colors">Eventos</a>
+        <a href="corporativo.html" class="hover:text-[var(--color-ink)] transition-colors">Corporativo</a>
+        <a href="#contacto" class="hover:text-[var(--color-ink)] transition-colors">Contacto</a>
+      </div>
+      <p class="text-[10px] text-[var(--color-ink-muted)]">© 2026 PuntoEvento — Gamificación Corporativa B2B.</p>
+    </div>
+  </footer>
+
+  <!-- PLAN MODAL -->
+  <div id="plan-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 transition-all duration-500 opacity-0 pointer-events-none">
+    <div class="bg-[var(--color-paper-2)] border border-[var(--color-rule)] rounded-3xl shadow-2xl w-full max-w-md p-8 space-y-6">
+      <div class="text-center space-y-1">
+        <div class="w-12 h-12 mx-auto rounded-2xl bg-[var(--color-points)]/10 flex items-center justify-center text-xl mb-3">🎯</div>
+        <h3 class="text-xl font-extrabold text-[var(--color-ink)]">Solicitar <span id="plan-modal-name">Plan</span></h3>
+        <p class="text-xs text-[var(--color-ink-muted)]">Precio: <span id="plan-modal-price" class="font-bold text-[var(--color-points)]"></span></p>
+      </div>
+      <form id="plan-form" class="space-y-4" novalidate>
+        <input type="hidden" id="plan-form-plan" value="">
+        <div class="space-y-1.5">
+          <label class="text-[10px] font-bold text-[var(--color-ink-muted)] uppercase tracking-widest">Nombre *</label>
+          <input type="text" name="nombre" required class="access-form-input" placeholder="Tu nombre completo">
+        </div>
+        <div class="space-y-1.5">
+          <label class="text-[10px] font-bold text-[var(--color-ink-muted)] uppercase tracking-widest">Correo *</label>
+          <input type="email" name="email" required class="access-form-input" placeholder="correo@empresa.com">
+        </div>
+        <div class="space-y-1.5">
+          <label class="text-[10px] font-bold text-[var(--color-ink-muted)] uppercase tracking-widest">Empresa</label>
+          <input type="text" name="empresa" class="access-form-input" placeholder="Nombre de tu empresa">
+        </div>
+        <div class="space-y-1.5">
+          <label class="text-[10px] font-bold text-[var(--color-ink-muted)] uppercase tracking-widest">Comentario <span class="opacity-50">(opcional)</span></label>
+          <textarea name="comentario" rows="2" class="access-form-input resize-none" placeholder="¿En qué podemos ayudarte?"></textarea>
+        </div>
+        <div class="space-y-1.5">
+          <label class="text-[10px] font-bold text-[var(--color-ink-muted)] uppercase tracking-widest">Verificación *</label>
+          <div class="flex items-center gap-3">
+            <canvas id="plan-captcha-1" class="flex-1 rounded-xl border border-[var(--color-rule)]" style="height:50px"></canvas>
+            <span class="text-[var(--color-ink-muted)] font-bold">+</span>
+            <canvas id="plan-captcha-2" class="flex-1 rounded-xl border border-[var(--color-rule)]" style="height:50px"></canvas>
+            <span class="text-[var(--color-ink-muted)] font-bold">=</span>
+            <input type="number" name="captcha" required class="w-16 text-center access-form-input font-mono [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" placeholder="?">
+          </div>
+          <p id="plan-captcha-error" class="text-[10px] text-[var(--color-rose)] hidden">Respuesta incorrecta.</p>
+        </div>
+        <button type="submit" class="w-full py-3.5 rounded-xl text-sm font-bold uppercase tracking-wider" style="background:var(--color-points);color:#000">Enviar Solicitud</button>
+        <p id="plan-form-error" class="text-[10px] text-[var(--color-rose)] text-center hidden">Completa todos los campos obligatorios.</p>
+        <p id="plan-form-success" class="text-[12px] text-[var(--color-emerald)] text-center hidden">¡Solicitud enviada! Te contactaremos pronto.</p>
+      </form>
+      <button id="close-plan-modal" class="w-full py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider border border-[var(--color-rule)] hover:bg-[var(--color-paper-3)] transition-colors">Cerrar</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    function showPlanModal(name, price) {
+      document.getElementById('plan-modal-name').textContent = name;
+      document.getElementById('plan-modal-price').textContent = price;
+      document.getElementById('plan-form-plan').value = name;
+      const modal = document.getElementById('plan-modal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.classList.add('opacity-100', 'pointer-events-auto');
+      generateCaptcha('plan-captcha-1', 'plan-captcha-2');
+    }
+
+    document.getElementById('close-plan-modal').addEventListener('click', () => {
+      const modal = document.getElementById('plan-modal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      modal.classList.remove('opacity-100', 'pointer-events-auto');
+    });
+
+    function renderCaptchaImg(canvas, number) {
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = 80;
+      const h = canvas.height = 50;
+      ctx.fillStyle = '#18181b';
+      ctx.fillRect(0, 0, w, h);
+      for (let i = 0; i < 6; i++) {
+        ctx.strokeStyle = `rgba(${100 + Math.random() * 100}, ${100 + Math.random() * 100}, ${100 + Math.random() * 100}, 0.4)`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(Math.random() * w, Math.random() * h);
+        ctx.bezierCurveTo(Math.random() * w, Math.random() * h, Math.random() * w, Math.random() * h, Math.random() * w, Math.random() * h);
+        ctx.stroke();
+      }
+      for (let i = 0; i < 30; i++) {
+        ctx.fillStyle = `rgba(${150 + Math.random() * 100}, ${150 + Math.random() * 100}, ${150 + Math.random() * 100}, ${0.3 + Math.random() * 0.4})`;
+        ctx.beginPath();
+        ctx.arc(Math.random() * w, Math.random() * h, 1 + Math.random() * 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      const colors = ['#3b82f6', '#8b5cf6', '#ef4444', '#10b981', '#f59e0b'];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const fontSize = 28 + Math.floor(Math.random() * 6);
+      ctx.font = `900 ${fontSize}px 'Cabinet Grotesk', system-ui, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const digits = String(number).split('');
+      const digitWidth = w / (digits.length + 1);
+      digits.forEach((digit, i) => {
+        ctx.save();
+        const x = digitWidth * (i + 1);
+        const y = h / 2 + (Math.random() - 0.5) * 8;
+        const rotation = (Math.random() - 0.5) * 0.3;
+        ctx.translate(x, y);
+        ctx.rotate(rotation);
+        ctx.fillStyle = color;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 4;
+        ctx.fillText(digit, 0, 0);
+        ctx.restore();
+      });
+    }
+
+    function generateCaptcha(canvasId1, canvasId2) {
+      const a = Math.floor(Math.random() * 10) + 1;
+      const b = Math.floor(Math.random() * 10) + 1;
+      const c1 = document.getElementById(canvasId1);
+      const c2 = document.getElementById(canvasId2);
+      renderCaptchaImg(c1, a);
+      renderCaptchaImg(c2, b);
+      c1.dataset.answer = a + b;
+    }
+
+    generateCaptcha('contact-captcha-1', 'contact-captcha-2');
+
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const captcha1 = parseInt(document.getElementById('contact-captcha-1').dataset.answer);
+      const captchaInput = parseInt(this.querySelector('[name=captcha]').value);
+      if (captchaInput !== captcha1) {
+        document.getElementById('contact-captcha-error').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('contact-captcha-error').classList.add('hidden');
+      if (!this.querySelector('[name=nombre]').value || !this.querySelector('[name=email]').value) {
+        document.getElementById('contact-form-error').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('contact-form-error').classList.add('hidden');
+      const data = {
+        plan: 'Puntos Express - Contacto General',
+        nombre: this.querySelector('[name=nombre]').value,
+        email: this.querySelector('[name=email]').value,
+        empresa: this.querySelector('[name=empresa]').value,
+        comentario: this.querySelector('[name=comentario]').value
+      };
+      fetch('https://discord.com/api/webhooks/1528904342990491789/BjjFMXW84J6H2dCsYz5sIp8ME7-5_3ySc7u1CAR5D7_KyI5mLW1EYzp8hMjClUgFIcI0', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: `**Nuevo contacto - Puntos**\n**Plan:** ${data.plan}\n**Nombre:** ${data.nombre}\n**Email:** ${data.email}\n**Empresa:** ${data.empresa}\n**Comentario:** ${data.comentario}` })
+      }).then(() => {
+        document.getElementById('contact-form-success').classList.remove('hidden');
+        this.reset();
+        generateCaptcha('contact-captcha-1', 'contact-captcha-2');
+      });
+    });
+
+    document.getElementById('plan-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const captcha1 = parseInt(document.getElementById('plan-captcha-1').dataset.answer);
+      const captchaInput = parseInt(this.querySelector('[name=captcha]').value);
+      if (captchaInput !== captcha1) {
+        document.getElementById('plan-captcha-error').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('plan-captcha-error').classList.add('hidden');
+      if (!this.querySelector('[name=nombre]').value || !this.querySelector('[name=email]').value) {
+        document.getElementById('plan-form-error').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('plan-form-error').classList.add('hidden');
+      const data = {
+        plan: document.getElementById('plan-form-plan').value,
+        nombre: this.querySelector('[name=nombre]').value,
+        email: this.querySelector('[name=email]').value,
+        empresa: this.querySelector('[name=empresa]').value,
+        comentario: this.querySelector('[name=comentario]').value
+      };
+      fetch('https://discord.com/api/webhooks/1528904342990491789/BjjFMXW84J6H2dCsYz5sIp8ME7-5_3ySc7u1CAR5D7_KyI5mLW1EYzp8hMjClUgFIcI0', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: `**Nueva solicitud de plan - Puntos**\n**Plan:** ${data.plan}\n**Nombre:** ${data.nombre}\n**Email:** ${data.email}\n**Empresa:** ${data.empresa}\n**Comentario:** ${data.comentario}` })
+      }).then(() => {
+        document.getElementById('plan-form-success').classList.remove('hidden');
+        this.reset();
+        generateCaptcha('plan-captcha-1', 'plan-captcha-2');
+      });
+    });
+  </script>
+</body>
+</html>

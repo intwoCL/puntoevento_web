@@ -1,0 +1,19 @@
+:root {
+  --page-accent: var(--color-events);
+  --page-accent-muted: var(--color-events-muted);
+  --page-accent-hover: var(--color-events-hover);
+}
+
+.hero-gradient { background: radial-gradient(ellipse at 30% 20%, oklch(18% 0.04 25) 0%, transparent 60%); }
+
+.step-number { background: var(--color-events-muted); color: var(--color-events); }
+.feature-icon { background: var(--color-events-muted); color: var(--color-events); }
+.product-card-events { border-color: var(--color-events); }
+.product-card-events:hover { border-color: var(--color-events); box-shadow: 0 20px 40px -12px rgba(239,68,68,.2); }
+
+.event-card { border: 1px solid var(--color-rule); background-color: var(--color-paper); transition: all var(--transition-fast); cursor: pointer; }
+.event-card:hover { border-color: var(--color-events); background-color: var(--color-paper-2); }
+.event-card.registered { border-color: var(--color-events); }
+
+.ticket-modal { background: linear-gradient(135deg, var(--color-paper-2), var(--color-paper)); border: 1px solid var(--color-rule); border-radius: 16px; position: relative; overflow: hidden; }
+.ticket-modal::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 30% 20%, var(--color-events-muted) 0%, transparent 50%); pointer-events: none; }
