@@ -212,9 +212,9 @@ code, pre {
 .access-form-input {
   background-color: var(--color-paper);
   border: 1px solid var(--color-rule);
-  border-radius: 12px;
-  padding: 0.75rem 1rem;
-  font-size: 0.875rem;
+  border-radius: 10px;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.8125rem;
   color: var(--color-ink);
   width: 100%;
   transition: border-color var(--transition-fast);
@@ -225,6 +225,37 @@ code, pre {
 }
 .access-form-input::placeholder {
   color: rgb(113 113 122 / 0.5);
+}
+
+/* Compact Centered Modal Box */
+.modal-card-compact {
+  width: 100%;
+  max-width: 360px;
+  padding: 1.25rem 1.5rem;
+  background-color: var(--color-paper-2);
+  border: 1px solid var(--color-rule);
+  border-radius: 20px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: scale(0.94);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-rule) transparent;
+}
+
+.modal-card-compact::-webkit-scrollbar {
+  width: 4px;
+}
+
+.modal-card-compact::-webkit-scrollbar-thumb {
+  background: var(--color-rule);
+  border-radius: 4px;
+}
+
+.opacity-100 .modal-card-compact {
+  transform: scale(1);
 }
 
 @keyframes pulse-dot {
@@ -383,3 +414,23 @@ code, pre {
   }
   .callout-line { display: none; }
 }
+
+/* Floating Brand Customizer Widget */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 12s linear infinite;
+}
+
+#brand-widget-panel {
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85), 0 0 30px rgba(0, 0, 0, 0.6);
+}
+
+.floating-icon-btn.active {
+  border-color: var(--color-corporate) !important;
+  background-color: var(--color-paper-3) !important;
+  transform: scale(1.1);
+}
+

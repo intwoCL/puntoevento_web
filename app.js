@@ -6,10 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let coinShortName = 'pts';
 
   const rewardItems = [
-    { id: 'reward-keychain', name: 'Llavero Metálico', points: 100, unlocked: false },
-    { id: 'reward-mug', name: 'Termo Metálico', points: 300, unlocked: false },
-    { id: 'reward-shirt', name: 'Café Premium', points: 600, unlocked: false },
-    { id: 'reward-pass', name: 'Gift Card $10.000', points: 1000, unlocked: false }
+    { id: 'reward-keychain', name: 'Llavero Metálico', points: 100, img: 'assets/img/1_llavero.png', unlocked: false },
+    { id: 'reward-mug', name: 'Termo Metálico', points: 300, img: 'assets/img/2_termo.png', unlocked: false },
+    { id: 'reward-shirt', name: 'Café Premium', points: 600, img: 'assets/img/3_cafe.png', unlocked: false },
+    { id: 'reward-pass', name: 'Gift Card $10.000', points: 1000, img: 'assets/img/4_gifcard.png', unlocked: false }
   ];
 
   const events = [
@@ -36,6 +36,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const ticketCode = document.getElementById('ticket-code');
   const combinedPoints = document.getElementById('combined-points');
   const combinedEvents = document.getElementById('combined-events');
+
+  // ===== SOUND EFFECTS SYSTEM =====
+  const soundCoins = new Audio('assets/sound/correct_coins.mp3');
+  const soundEvento = new Audio('assets/sound/correct_evento.mp3');
+  const soundClick = new Audio('assets/sound/change_click.mp3');
+
+  function playSound(audio) {
+    if (!audio) return;
+    try {
+      const clone = audio.cloneNode();
+      clone.volume = 0.85;
+      clone.play().catch(() => {});
+    } catch (_) {}
+  }
 
   // ===== NOTIFICATIONS =====
   function showNotification(text) {
@@ -85,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
       userPoints += parseInt(button.dataset.points);
       createFloatingIndicator(`+${parseInt(button.dataset.points)} ${coinShortName}`);
       updateSimulatorUI();
+      playSound(soundCoins);
     });
   });
 
@@ -119,7 +134,150 @@ document.addEventListener('DOMContentLoaded', () => {
     if (combinedPoints) combinedPoints.textContent = userPoints;
   }
 
+  // ===== FLOATING REWARDS SYSTEM =====
+  const floatingContainer = document.getElementById('floating-rewards-container');
+
+  if (floatingContainer) {
+    const floatingItems = [
+      { id: 'orb-1', icon: '🎁', title: 'Bonus Diario', points: 150, posClass: 'orb-pos-1' },
+      { id: 'orb-2', icon: '⚡', title: 'Boost Misión', points: 200, posClass: 'orb-pos-2' },
+      { id: 'orb-3', icon: '🏆', title: 'Logro Especial', points: 250, posClass: 'orb-pos-3' },
+      { id: 'orb-4', icon: '☕', title: 'Convenio Café', points: 100, posClass: 'orb-pos-4' },
+      { id: 'orb-5', icon: '💎', title: 'Cofre Diamante', points: 300, posClass: 'orb-pos-5' }
+    ];
+
+    const rewardPool = [
+      { icon: '🌟', title: 'Premio Estelar', points: 180 },
+      { icon: '🔥', title: 'Racha 7 Días', points: 220 },
+      { icon: '🎯', title: 'Desafío Extra', points: 130 },
+      { icon: '🛒', title: 'Descuento Aliado', points: 160 },
+      { icon: '🚀', title: 'Nivel Up', points: 350 },
+      { icon: '👑', title: 'Bonus VIP', points: 400 },
+      { icon: '🍕', title: 'Puntos Snack', points: 90 },
+      { icon: '🎉', title: 'Sorpresa Evento', points: 270 }
+    ];
+
+    function createOrbElement(item) {
+      const orb = document.createElement('div');
+      orb.className = `floating-reward-orb ${item.posClass}`;
+      orb.dataset.points = item.points;
+      orb.dataset.id = item.id;
+      orb.innerHTML = `
+        <div class="orb-icon">${item.icon}</div>
+        <div class="orb-details">
+          <span class="orb-title">${item.title}</span>
+          <span class="orb-points">+${item.points} <span class="coin-name-display-short">${coinShortName}</span></span>
+        </div>
+        <button class="orb-action-btn">Cargar ⚡</button>
+      `;
+
+      orb.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (orb.classList.contains('is-charging') || orb.classList.contains('is-collected')) return;
+
+        playSound(soundClick);
+
+        // 1. Charge state
+        orb.classList.add('is-charging');
+
+        // 2. Calculate source & target positions
+        const orbRect = orb.getBoundingClientRect();
+        const phoneScreen = document.getElementById('user-points') || document.getElementById('phone-screen-content');
+        const phoneRect = phoneScreen ? phoneScreen.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0, height: 0 };
+
+        const startX = orbRect.left + orbRect.width / 2;
+        const startY = orbRect.top + orbRect.height / 2;
+        const targetX = phoneRect.left + phoneRect.width / 2;
+        const targetY = phoneRect.top + phoneRect.height / 2;
+
+        // 3. Spawn particle trail
+        const particleCount = 8;
+        for (let i = 0; i < particleCount; i++) {
+          setTimeout(() => {
+            spawnFlyingParticle(startX, startY, targetX, targetY, item.icon);
+          }, i * 50);
+        }
+
+        // 4. On arrival after stream completes
+        setTimeout(() => {
+          // Update points balance
+          userPoints += parseInt(orb.dataset.points);
+          createFloatingIndicator(`+${orb.dataset.points} ${coinShortName}`);
+          updateSimulatorUI();
+          playSound(soundCoins);
+          showNotification(`¡Recompensa cargada! +${orb.dataset.points} pts recibidos de "${orb.querySelector('.orb-title').textContent}".`);
+
+          // Phone screen ripple effect
+          const phoneContent = document.getElementById('phone-screen-content');
+          if (phoneContent) {
+            phoneContent.classList.add('ring-4', 'ring-[var(--color-points)]', 'transition-all', 'duration-300');
+            setTimeout(() => {
+              phoneContent.classList.remove('ring-4', 'ring-[var(--color-points)]', 'transition-all', 'duration-300');
+            }, 500);
+          }
+
+          // Orb state -> Collected
+          orb.classList.remove('is-charging');
+          orb.classList.add('is-collected');
+          const actionBtn = orb.querySelector('.orb-action-btn');
+          if (actionBtn) actionBtn.textContent = '✓ Cargado';
+
+          // Respawn new reward after 3 seconds
+          setTimeout(() => {
+            orb.style.opacity = '0';
+            orb.style.transform = 'scale(0.5)';
+            setTimeout(() => {
+              const randomNext = rewardPool[Math.floor(Math.random() * rewardPool.length)];
+              orb.dataset.points = randomNext.points;
+              orb.querySelector('.orb-icon').textContent = randomNext.icon;
+              orb.querySelector('.orb-title').textContent = randomNext.title;
+              orb.querySelector('.orb-points').innerHTML = `+${randomNext.points} <span class="coin-name-display-short">${coinShortName}</span>`;
+              if (actionBtn) actionBtn.textContent = 'Cargar ⚡';
+              orb.classList.remove('is-collected');
+              orb.style.opacity = '1';
+              orb.style.transform = '';
+            }, 350);
+          }, 3000);
+
+        }, particleCount * 50 + 350);
+      });
+
+      return orb;
+    }
+
+    function spawnFlyingParticle(x1, y1, x2, y2, emoji) {
+      const p = document.createElement('div');
+      p.className = 'reward-flying-particle';
+      p.textContent = emoji || '🪙';
+      p.style.left = `${x1}px`;
+      p.style.top = `${y1}px`;
+      document.body.appendChild(p);
+
+      const jitterX = (Math.random() - 0.5) * 100;
+      const jitterY = (Math.random() - 0.5) * 60;
+
+      requestAnimationFrame(() => {
+        p.style.transform = `translate(${x2 - x1 + jitterX}px, ${y2 - y1 + jitterY}px) scale(0.7)`;
+        p.style.opacity = '0.9';
+      });
+
+      setTimeout(() => {
+        p.style.transform = `translate(${x2 - x1}px, ${y2 - y1}px) scale(0.2)`;
+        p.style.opacity = '0';
+      }, 450);
+
+      setTimeout(() => p.remove(), 700);
+    }
+
+    // Render initial floating orbs
+    floatingItems.forEach(item => {
+      const orbEl = createOrbElement(item);
+      floatingContainer.appendChild(orbEl);
+    });
+  }
+
   // ===== REDEEM =====
+  let redeemedCount = 0;
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('.redeem-btn:not([disabled])');
     if (!btn) return;
@@ -127,15 +285,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const item = rewardItems.find(r => r.id === itemEl.id);
     if (item && userPoints >= item.points) {
       userPoints -= item.points;
+      redeemedCount++;
       updateSimulatorUI();
       const code = 'PE-' + Math.floor(1000 + Math.random() * 9000) + '-' + String.fromCharCode(65 + Math.floor(Math.random() * 26));
       if (redeemCodeDisplay) redeemCodeDisplay.textContent = code;
       if (redeemProductDisplay) redeemProductDisplay.textContent = item.name;
+      document.querySelectorAll('#redeem-product-img').forEach(img => {
+        if (item.img) img.src = item.img;
+      });
       if (redeemModal) {
         redeemModal.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
         redeemModal.classList.add('translate-y-0', 'opacity-100');
       }
       showNotification(`¡Canjeado! ${item.name} se ha descontado de tu saldo.`);
+      playSound(soundEvento);
     }
   });
 
@@ -185,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderEventsList('events-list');
     renderEventsList('events-list-full');
 
-    const names = ['Ana Martínez', 'Carlos López', 'María García', 'José Hernández', 'Laura Rodríguez', 'Pedro Sánchez'];
+    const names = ['Ana Martínez', 'Elias Torres', 'María García', 'José Hernández', 'Laura Rodríguez', 'Pedro Sánchez'];
     const attendee = names[Math.floor(Math.random() * names.length)];
     const code = 'EV-' + Math.floor(1000 + Math.random() * 9000) + '-' + evt.name.substring(0, 3).toUpperCase();
 
@@ -202,6 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ticketModal.classList.add('translate-y-0', 'opacity-100');
     }
     showNotification(`¡Registro exitoso! Ticket generado para ${evt.name}`);
+    playSound(soundEvento);
 
     if (combinedEvents) combinedEvents.textContent = Object.keys(registeredEvents).length;
   });
@@ -213,17 +377,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ===== WHITE LABEL =====
+  // ===== WHITE LABEL & FLOATING CUSTOMIZER =====
   const coinNameInput = document.getElementById('coin-name-input');
-  function updateCoinNames() {
-    if (!coinNameInput) return;
-    const newName = coinNameInput.value.trim() || 'Muni-Puntos';
-    coinShortName = newName.substring(0, 5).toLowerCase();
-    document.querySelectorAll('.coin-name-display').forEach(el => el.textContent = newName);
+  const floatingCoinInput = document.getElementById('floating-coin-name-input');
+
+  function updateCoinNames(newName) {
+    const val = newName || (coinNameInput ? coinNameInput.value.trim() : '') || (floatingCoinInput ? floatingCoinInput.value.trim() : '') || 'Muni-Puntos';
+    coinShortName = val.substring(0, 5).toLowerCase();
+    document.querySelectorAll('.coin-name-display').forEach(el => el.textContent = val);
     document.querySelectorAll('.coin-name-display-short').forEach(el => el.textContent = coinShortName);
+    if (coinNameInput && coinNameInput.value !== val) coinNameInput.value = val;
+    if (floatingCoinInput && floatingCoinInput.value !== val) floatingCoinInput.value = val;
     updateSimulatorUI();
   }
-  if (coinNameInput) coinNameInput.addEventListener('input', updateCoinNames);
+
+  if (coinNameInput) coinNameInput.addEventListener('input', (e) => updateCoinNames(e.target.value));
+  if (floatingCoinInput) floatingCoinInput.addEventListener('input', (e) => updateCoinNames(e.target.value));
 
   const coinIconInput = document.getElementById('coin-icon-input');
   if (coinIconInput) {
@@ -231,6 +400,16 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.coin-icon-display').forEach(el => el.textContent = e.target.value);
     });
   }
+
+  document.querySelectorAll('.floating-icon-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.floating-icon-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const icon = btn.dataset.icon;
+      document.querySelectorAll('.coin-icon-display').forEach(el => el.textContent = icon);
+      if (coinIconInput) coinIconInput.value = icon;
+    });
+  });
 
   document.querySelectorAll('.theme-color-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -241,10 +420,164 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('border-white', 'scale-110');
       btn.classList.remove('border-transparent');
       document.documentElement.style.setProperty('--color-accent', btn.dataset.color);
-      document.documentElement.style.setProperty('--color-accent-hover', btn.dataset.hover);
-      document.documentElement.style.setProperty('--color-accent-muted', btn.dataset.muted);
+      document.documentElement.style.setProperty('--color-corporate', btn.dataset.color);
+      document.documentElement.style.setProperty('--color-points', btn.dataset.color);
+      if (btn.dataset.hover) document.documentElement.style.setProperty('--color-accent-hover', btn.dataset.hover);
+      if (btn.dataset.muted) document.documentElement.style.setProperty('--color-accent-muted', btn.dataset.muted);
     });
   });
+
+  // Floating widget toggle
+  const toggleBrandWidget = document.getElementById('toggle-brand-widget');
+  const brandWidgetPanel = document.getElementById('brand-widget-panel');
+  const closeBrandWidget = document.getElementById('close-brand-widget');
+
+  if (toggleBrandWidget && brandWidgetPanel) {
+    toggleBrandWidget.addEventListener('click', (e) => {
+      e.stopPropagation();
+      brandWidgetPanel.classList.toggle('hidden');
+    });
+
+    if (closeBrandWidget) {
+      closeBrandWidget.addEventListener('click', () => {
+        brandWidgetPanel.classList.add('hidden');
+      });
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!brandWidgetPanel.contains(e.target) && !toggleBrandWidget.contains(e.target)) {
+        brandWidgetPanel.classList.add('hidden');
+      }
+    });
+  }
+
+  // ===== MODE TABS SWITCHING (PUNTOS / EVENTOS / COMBINADO) =====
+  document.querySelectorAll('.mode-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const mode = tab.dataset.mode;
+      document.querySelectorAll('.mode-tab').forEach(t => {
+        t.classList.remove('bg-[var(--color-points)]', 'bg-[var(--color-events)]', 'bg-[var(--color-corporate)]', 'text-white');
+        t.classList.add('text-[var(--color-ink-muted)]');
+      });
+
+      if (mode === 'points') {
+        tab.classList.add('bg-[var(--color-points)]', 'text-white');
+        tab.classList.remove('text-[var(--color-ink-muted)]');
+        switchPhoneTab('puntos');
+        if (typeof showCloudView === 'function') showCloudView('points');
+      } else if (mode === 'events') {
+        tab.classList.add('bg-[var(--color-events)]', 'text-white');
+        tab.classList.remove('text-[var(--color-ink-muted)]');
+        switchPhoneTab('eventos');
+        if (typeof showCloudView === 'function') showCloudView('events');
+      } else if (mode === 'combined') {
+        tab.classList.add('bg-[var(--color-corporate)]', 'text-white');
+        tab.classList.remove('text-[var(--color-ink-muted)]');
+        switchPhoneTab('puntos');
+        if (typeof showCloudView === 'function') showCloudView('points');
+      }
+    });
+  });
+
+  // ===== PHONE INTERNAL NAVIGATION =====
+  function updatePhoneProfileUI() {
+    const pPoints = document.getElementById('profile-points-count');
+    const pEvents = document.getElementById('profile-events-count');
+    const pRedeems = document.getElementById('profile-redeems-count');
+    if (pPoints) pPoints.textContent = userPoints;
+    if (pEvents) pEvents.textContent = Object.keys(registeredEvents).length;
+    if (pRedeems) pRedeems.textContent = redeemedCount;
+  }
+
+  function switchPhoneTab(targetTab) {
+    const phonePoints = document.getElementById('phone-screen-content');
+    const phoneEvents = document.getElementById('phone-events-content');
+    const phoneProfile = document.getElementById('phone-profile-content');
+
+    const navPuntos = document.getElementById('phone-nav-puntos');
+    const navEventos = document.getElementById('phone-nav-eventos');
+    const navPerfil = document.getElementById('phone-nav-perfil');
+
+    if (phonePoints) phonePoints.classList.add('hidden');
+    if (phoneEvents) phoneEvents.classList.add('hidden');
+    if (phoneProfile) phoneProfile.classList.add('hidden');
+
+    [navPuntos, navEventos, navPerfil].forEach(btn => {
+      if (btn) {
+        btn.classList.remove('text-[var(--color-points)]', 'text-[var(--color-events)]', 'text-[var(--color-corporate)]', 'font-bold');
+        btn.classList.add('text-zinc-500');
+      }
+    });
+
+    if (targetTab === 'puntos') {
+      if (phonePoints) phonePoints.classList.remove('hidden');
+      if (navPuntos) {
+        navPuntos.classList.remove('text-zinc-500');
+        navPuntos.classList.add('text-[var(--color-points)]', 'font-bold');
+      }
+    } else if (targetTab === 'eventos') {
+      if (phoneEvents) phoneEvents.classList.remove('hidden');
+      if (navEventos) {
+        navEventos.classList.remove('text-zinc-500');
+        navEventos.classList.add('text-[var(--color-events)]', 'font-bold');
+      }
+    } else if (targetTab === 'perfil') {
+      if (phoneProfile) phoneProfile.classList.remove('hidden');
+      if (navPerfil) {
+        navPerfil.classList.remove('text-zinc-500');
+        navPerfil.classList.add('text-[var(--color-corporate)]', 'font-bold');
+      }
+      updatePhoneProfileUI();
+    }
+  }
+
+  document.querySelectorAll('#phone-nav-puntos, #footer-select-puntos, #cloud-select-puntos').forEach(btn => {
+    btn.addEventListener('click', () => switchPhoneTab('puntos'));
+  });
+  document.querySelectorAll('#phone-nav-eventos, #footer-select-eventos, #cloud-select-eventos').forEach(btn => {
+    btn.addEventListener('click', () => switchPhoneTab('eventos'));
+  });
+  document.querySelectorAll('#phone-nav-perfil').forEach(btn => {
+    btn.addEventListener('click', () => switchPhoneTab('perfil'));
+  });
+
+  // ===== PHONE SHARE PROFILE MODAL HANDLERS =====
+  const shareProfileBtn = document.getElementById('share-profile-btn');
+  const phoneShareModal = document.getElementById('phone-share-modal');
+  const closeShareModal = document.getElementById('close-share-modal');
+  const copyProfileLinkBtn = document.getElementById('copy-profile-link-btn');
+  const copyLinkText = document.getElementById('copy-link-text');
+
+  if (shareProfileBtn && phoneShareModal) {
+    shareProfileBtn.addEventListener('click', () => {
+      phoneShareModal.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
+      phoneShareModal.classList.add('translate-y-0', 'opacity-100');
+    });
+  }
+
+  if (closeShareModal && phoneShareModal) {
+    closeShareModal.addEventListener('click', () => {
+      phoneShareModal.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
+      phoneShareModal.classList.remove('translate-y-0', 'opacity-100');
+    });
+  }
+
+  if (copyProfileLinkBtn) {
+    copyProfileLinkBtn.addEventListener('click', () => {
+      const shareUrl = 'https://www.puntoevento.cl';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl).catch(() => { });
+      }
+      if (copyLinkText) {
+        const origText = copyLinkText.textContent;
+        copyLinkText.textContent = '¡Copiado! ✓';
+        setTimeout(() => {
+          copyLinkText.textContent = origText;
+        }, 2500);
+      }
+      showNotification('🔗 ¡Enlace https://www.puntoevento.cl copiado al portapapeles!');
+    });
+  }
 
   // ===== NAV =====
   const sections = document.querySelectorAll('section[id]');
@@ -379,6 +712,33 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
+    document.querySelectorAll('.close-access-modal').forEach(btn => {
+      btn.addEventListener('click', hideForm);
+    });
+
+    if (accessModal) {
+      accessModal.addEventListener('click', (e) => {
+        if (e.target === accessModal) hideForm();
+      });
+    }
+
+    const planModal = document.getElementById('plan-modal');
+    if (planModal) {
+      planModal.addEventListener('click', (e) => {
+        if (e.target === planModal) {
+          planModal.classList.add('opacity-0', 'pointer-events-none');
+          planModal.classList.remove('opacity-100', 'pointer-events-auto');
+        }
+      });
+    }
+    const closePlanX = document.getElementById('close-plan-modal-x');
+    if (closePlanX && planModal) {
+      closePlanX.addEventListener('click', () => {
+        planModal.classList.add('opacity-0', 'pointer-events-none');
+        planModal.classList.remove('opacity-100', 'pointer-events-auto');
+      });
+    }
+
     accessForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (formError) formError.classList.add('hidden');
@@ -428,7 +788,7 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-      } catch (_) {}
+      } catch (_) { }
 
       localStorage.setItem('pe_access_granted', 'true');
       hideForm();
