@@ -36,6 +36,7 @@
       }
     }
     </script>
+    <meta name="google-site-verification" content="VDO3CZcX8vQFcO_KPUVw9kBxvdsaG86dFVZR5TjY3sU" />
   </head>
 
   <body class="bg-[var(--color-paper)] text-[var(--color-ink)] antialiased min-h-screen relative">
@@ -170,17 +171,18 @@
           <span class="text-[var(--color-accent)]">●</span>PuntoEvento
         </a>
         <nav class="hidden md:flex items-center gap-7 text-[13px] font-medium text-[var(--color-ink-muted)]">
-          <a href="#modulos" class="nav-link hover:text-[var(--color-ink)] transition-colors">Módulos</a>
-          <a href="#simulador" class="nav-link hover:text-[var(--color-ink)] transition-colors">Simulador</a>
-          <a href="#comparativa" class="nav-link hover:text-[var(--color-ink)] transition-colors">Comparativa</a>
-          <a href="#marca-blanca" class="nav-link hover:text-[var(--color-ink)] transition-colors">Marca Blanca</a>
-          <a href="#features" class="nav-link hover:text-[var(--color-ink)] transition-colors">Features</a>
-          <a href="#pricing" class="nav-link hover:text-[var(--color-ink)] transition-colors">Planes</a>
+          <a href="#modulos" class="nav-link hover:text-[var(--color-ink)] transition-colors">Sistema</a>
+          <a href="puntos.html" class="nav-link hover:text-[var(--color-ink)] transition-colors">Punto</a>
+          <a href="corporativo.html" class="nav-link hover:text-[var(--color-ink)] transition-colors">Evento</a>
+          <a href="#pricing" class="nav-link hover:text-[var(--color-ink)] transition-colors">Precio</a>
         </nav>
         <div class="flex items-center gap-2">
-          <a href="#contacto"
-            class="px-4 py-2 rounded-full text-[11px] uppercase tracking-wider font-semibold border border-[var(--color-rule)] hover:bg-[var(--color-paper-2)] transition-colors text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]">Contactar</a>
-          <a href="#simulador" class="primary-btn px-5 py-2 rounded-full text-[11px] uppercase tracking-wider font-semibold">Probar Demo</a>
+          <button type="button"
+            class="theme-toggle-btn w-9 h-9 rounded-full border border-[var(--color-rule)] bg-[var(--color-paper-2)] hover:bg-[var(--color-paper-3)] text-[var(--color-ink)] flex items-center justify-center text-sm transition-all"
+            title="Cambiar Modo Claro/Oscuro">
+            <span class="theme-toggle-icon">☀️</span>
+          </button>
+          <a href="#contacto" class="primary-btn px-5 py-2 rounded-full text-[11px] uppercase tracking-wider font-semibold">Conectar</a>
         </div>
       </div>
     </header>
@@ -280,7 +282,8 @@
                       <button class="redeem-btn text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors bg-transparent text-gray-500 cursor-not-allowed" disabled>Canjear</button>
                     </div>
 
-                    <div id="reward-mug" class="reward-item p-2.5 border border-[var(--color-rule)] rounded-xl flex items-center justify-between gap-2 transition-all duration-300 opacity-55 border-dashed">
+                    <div id="reward-mug"
+                      class="reward-item p-2.5 border border-[var(--color-rule)] rounded-xl flex items-center justify-between gap-2 transition-all duration-300 opacity-55 border-dashed">
                       <div class="flex items-center gap-2.5">
                         <div class="w-11 h-11 rounded-xl border border-zinc-700/80 overflow-hidden shrink-0 shadow-md bg-zinc-950">
                           <img src="assets/img/2_termo.png" alt="Termo Metálico" class="w-full h-full object-cover block">
@@ -294,7 +297,8 @@
                       <button class="redeem-btn text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors bg-transparent text-gray-500 cursor-not-allowed" disabled>Canjear</button>
                     </div>
 
-                    <div id="reward-shirt" class="reward-item p-2.5 border border-[var(--color-rule)] rounded-xl flex items-center justify-between gap-2 transition-all duration-300 opacity-55 border-dashed">
+                    <div id="reward-shirt"
+                      class="reward-item p-2.5 border border-[var(--color-rule)] rounded-xl flex items-center justify-between gap-2 transition-all duration-300 opacity-55 border-dashed">
                       <div class="flex items-center gap-2.5">
                         <div class="w-11 h-11 rounded-xl border border-zinc-700/80 overflow-hidden shrink-0 shadow-md bg-zinc-950">
                           <img src="assets/img/3_cafe.png" alt="Café Premium" class="w-full h-full object-cover block">
@@ -308,7 +312,8 @@
                       <button class="redeem-btn text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors bg-transparent text-gray-500 cursor-not-allowed" disabled>Canjear</button>
                     </div>
 
-                    <div id="reward-pass" class="reward-item p-2.5 border border-[var(--color-rule)] rounded-xl flex items-center justify-between gap-2 transition-all duration-300 opacity-55 border-dashed">
+                    <div id="reward-pass"
+                      class="reward-item p-2.5 border border-[var(--color-rule)] rounded-xl flex items-center justify-between gap-2 transition-all duration-300 opacity-55 border-dashed">
                       <div class="flex items-center gap-2.5">
                         <div class="w-11 h-11 rounded-xl border border-zinc-700/80 overflow-hidden shrink-0 shadow-md bg-zinc-950">
                           <img src="assets/img/4_gifcard.png" alt="Gift Card $10.000" class="w-full h-full object-cover block">
@@ -993,7 +998,7 @@
             <div class="w-10 h-10 rounded-full bg-[var(--color-accent-muted)] flex items-center justify-center text-sm font-bold text-[var(--color-accent)]">MR</div>
             <div>
               <p class="text-[12px] font-bold text-[var(--color-ink)]">María Rodríguez</p>
-              <p class="text-[10px] text-[var(--color-ink-muted)]">Directora de Marketing, FarmaciasSalud</p>
+              <p class="text-[10px] text-[var(--color-ink-muted)]">Directora de Marketing</p>
             </div>
           </div>
         </div>
@@ -1004,7 +1009,7 @@
             <div class="w-10 h-10 rounded-full bg-[var(--color-accent-muted)] flex items-center justify-center text-sm font-bold text-[var(--color-accent)]">CP</div>
             <div>
               <p class="text-[12px] font-bold text-[var(--color-ink)]">Carlos Pérez</p>
-              <p class="text-[10px] text-[var(--color-ink-muted)]">RRHH Manager, TechCorp Chile</p>
+              <p class="text-[10px] text-[var(--color-ink-muted)]">RRHH Manager</p>
             </div>
           </div>
         </div>
@@ -1014,7 +1019,7 @@
             <div class="w-10 h-10 rounded-full bg-[var(--color-accent-muted)] flex items-center justify-center text-sm font-bold text-[var(--color-accent)]">AL</div>
             <div>
               <p class="text-[12px] font-bold text-[var(--color-ink)]">Ana López</p>
-              <p class="text-[10px] text-[var(--color-ink-muted)]">Gerente de Operaciones, RetailPlus</p>
+              <p class="text-[10px] text-[var(--color-ink-muted)]">Gerente de Operaciones</p>
             </div>
           </div>
         </div>

@@ -826,9 +826,30 @@ document.addEventListener('DOMContentLoaded', () => {
   if (footerPuntos) footerPuntos.addEventListener('click', () => showCloudView('points'));
   if (footerEventos) footerEventos.addEventListener('click', () => showCloudView('events'));
 
+  // ===== THEME TOGGLE (Dark por defecto, Claro opcional) =====
+  const currentTheme = localStorage.getItem('pe_theme');
+  if (currentTheme === 'light') {
+    document.documentElement.classList.add('theme-light');
+  } else {
+    document.documentElement.classList.remove('theme-light');
+  }
+
+  document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      playSound(soundClick);
+      const isLight = document.documentElement.classList.toggle('theme-light');
+      localStorage.setItem('pe_theme', isLight ? 'light' : 'dark');
+      document.querySelectorAll('.theme-toggle-btn').forEach(b => {
+        const icon = b.querySelector('.theme-toggle-icon');
+        if (icon) icon.textContent = isLight ? '🌙' : '☀️';
+      });
+    });
+  });
+
   // ===== INIT =====
   renderEventsList('events-list');
   renderEventsList('events-list-full');
   updateSimulatorUI();
   updateCoinNames();
 });
+
